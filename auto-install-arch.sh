@@ -10,6 +10,16 @@ echo ""
 echo "Auto Installer Arch Linux - V0.1A"
 echo ""
 
+mkdir /temp
+touch /temp/logs.log
+echo "Informations système :"
+echo ""
+#lscpu | egrep -wi 'intel|amd'
+egrep -wi 'intel|amd' /proc/cpuinfo
+egrep MemTotal /proc/meminfo
+egrep -wi 'nvdia|amd' /proc/gpuinfo
+
+
 loadkeys fr_CH
 timedatectl set-ntp true
 timedatectl set-timezone Europe/Zurich
@@ -21,11 +31,6 @@ do
     select confirmConf in Oui Non
     do
         case $confirmConf in
-            Oui )
-                echo ""
-                echo "Prafait ! Suite du script en cours..."
-                echo ""
-                break;;
             Non )
                 echo "Voulez-vous activer SSH ?"
                 select choixSSH in Oui Non
@@ -110,10 +115,10 @@ do
                 do
                     case $choixFormatSystem in
                         Bios/MBR )
-                            formatSystem=0
+                            formatSystem=Bios/MBR
                             break;;
                         UEFI )
-                            formatSystem=1
+                            formatSystem=UEFI
                             break;;
                         Reboot )
                             sudo reboot
@@ -160,7 +165,12 @@ do
                 echo "Taille du SWAP : " $swapSize
                 echo ""
                 echo "Voici la configuration, êtes-vous sûr-e ?"
-
+                break;;
+            Oui )
+                echo ""
+                echo "Prafait ! Suite du script en cours..."
+                echo ""
+                
                 break;;
             * )
                 echo ""
